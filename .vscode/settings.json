@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "texture.C": "cpp",
+        "main.h": "c"
+    }
+}

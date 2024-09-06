@@ -55,3 +55,6 @@ void destroy_instance(SDL_Instance *instance)
     instance->window = NULL;
     SDL_Quit();
 }
+
+
+

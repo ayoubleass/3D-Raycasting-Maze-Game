@@ -50,15 +50,16 @@ void rotate(int key, Direction *direction, Plan *plane) {
     double rotation_speed = 0.05;
     double cos_rot = cos(rotation_speed);
     double sin_rot = sin(rotation_speed);
+    double oldDirX, oldPlaneX;
 
     switch (key) {
         case SDLK_LEFT:
             {
-                double oldDirX = direction->x;
+                oldDirX = direction->x;
                 direction->x = direction->x * cos_rot - direction->y * sin_rot;
                 direction->y = oldDirX * sin_rot + direction->y * cos_rot;
 
-                double oldPlaneX = plane->x;
+                oldPlaneX = plane->x;
                 plane->x = plane->x * cos_rot - plane->y * sin_rot;
                 plane->y = oldPlaneX * sin_rot + plane->y * cos_rot;
             }
@@ -66,11 +67,11 @@ void rotate(int key, Direction *direction, Plan *plane) {
 
         case SDLK_RIGHT:
             {
-                double oldDirX = direction->x;
+                oldDirX = direction->x;
                 direction->x = direction->x * cos_rot + direction->y * sin_rot;
                 direction->y = -oldDirX * sin_rot + direction->y * cos_rot;
 
-                double oldPlaneX = plane->x;
+                oldPlaneX = plane->x;
                 plane->x = plane->x * cos_rot + plane->y * sin_rot;
                 plane->y = -oldPlaneX * sin_rot + plane->y * cos_rot;
             }
@@ -122,13 +123,13 @@ void move(SDL_Keycode key, Player *player, Direction *direction, double move_spe
  * This function clears the renderer with a sky color and then draws
  * a rectangle to represent the ground.
  */
-void rendreceilAndGround(SDL_Instance *instance){
-        SDL_SetRenderDrawColor(instance->renderer, 135, 206, 235, 0); 
-        SDL_RenderClear(instance->renderer);
-        SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
-        SDL_SetRenderDrawColor(instance->renderer, 65, 152, 10, 0);
-        SDL_RenderFillRect(instance->renderer, &groundRect);
-}
+// void rendreceilAndGround(SDL_Instance *instance){
+//         SDL_SetRenderDrawColor(instance->renderer, 135, 206, 235, 0); 
+//         SDL_RenderClear(instance->renderer);
+//         SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
+//         SDL_SetRenderDrawColor(instance->renderer, 65, 152, 10, 0);
+//         SDL_RenderFillRect(instance->renderer, &groundRect);
+// }
 
 
 /**
@@ -175,5 +176,58 @@ void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int
             *hitSide = 1;
         }
         if (map[*mapY][*mapX] > 0) break;
+    }
+}
+
+
+
+
+SDL_Texture *loadTexture(SDL_Instance *instance, const char *path) {
+    SDL_Surface *tempSurface = SDL_LoadBMP(path); 
+    if (!tempSurface) {
+        printf("Failed to load texture: %s\n", SDL_GetError());
+        return NULL;
+    }
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(instance->renderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+    if (!texture) {
+        printf("Failed to create texture: %s\n", SDL_GetError());
+    }
+    return texture;
+}
+
+
+void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) {
+    SDL_SetRenderDrawColor(instance->renderer, 135, 206, 235, 255); 
+    SDL_RenderClear(instance->renderer);
+    SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
+    int y = SCREEN_HEIGHT / 2;
+    if (groundTexture) {
+        for (; y < SCREEN_HEIGHT; y++) {
+            double rayDirX0 = direction.x - plan.x;
+            double rayDirX1 = direction.x + plan.x;
+            double rayDirY0 = direction.y - plan.y;
+            double rayDirY1 = direction.y + plan.y;
+            int pY = y - SCREEN_HEIGHT / 2;  
+            double posZ = 0.5 * SCREEN_HEIGHT;      
+            double rowDistance = posZ / pY;
+            double floorStepX = rowDistance * (rayDirX1 - rayDirX0) / SCREEN_WIDTH;
+            double floorStepY = rowDistance * (rayDirY1 - rayDirY0) / SCREEN_WIDTH;
+            /*printf("rowDistance  : %lf\n", rowDistance);*/
+            double floorX = p->x + rowDistance * rayDirX0;
+            double floorY = p->y + rowDistance * rayDirY0;
+            
+            for (int x = 0; x < SCREEN_WIDTH; x++) {
+                int cellX = (int)floorX;
+                int cellY = (int)floorY;              
+                int tx = (int)(64 * (floorX - cellX)) & (64 - 1);
+                int ty = (int)(64 * (floorY - cellY)) & (64 - 1);
+                floorX += floorStepX;
+                floorY += floorStepY;
+                SDL_Rect srcRect = {tx, ty, 1, 1};
+                SDL_Rect destRect = {x, y, 1, 1};
+                SDL_RenderCopy(instance->renderer, groundTexture, &srcRect, &destRect);
+            }
+        }
     }
 }
