@@ -1,21 +1,25 @@
 #include <stdio.h>
-#include <stdbool.h>
+#include <dirent.h>
 #include "../headers/main.h"
 #include <math.h>
 #include<windows.h> 
 #include<unistd.h>
-#define NUM_TEXTURES 1
+#include <dirent.h> 
 
 
-/*gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c src/drawMap.c src/init_sdl.c  -lmingw32 -lSDL2main -lSDL2*/
+
+/*gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c  src/rotate.c src/essential.c src/init_sdl.c  src/init-texture_path.c src/move.c -lmingw32 -lSDL2main -lSDL2*/
+
+char *TexturePaths[NUM_TEXTURES];
+
 int map[mapWidth][mapHeight]  ={
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,0,2,2,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,0,2,2,0,0,0,3,0,0,0,3,0,0,0,1},
+  {1,0,0,0,0,0,1,1,0,0,1,1,0,0,0,1,0,1,0,3,0,0,0,1},
+  {1,0,0,0,0,0,1,1,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,1,2,0,0,2,2,0,0,0,3,0,0,0,3,0,0,0,1},
   {1,0,0,0,0,0,2,2,0,0,2,2,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,2,2,0,0,2,2,0,0,0,3,0,3,0,3,0,0,0,1},
   {1,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -39,14 +43,21 @@ int map[mapWidth][mapHeight]  ={
 
 SDL_Texture *wallTextures[NUM_TEXTURES];
 
-
-int setTexture(SDL_Instance *instance, char paths[1][1024], int size) {
-    if(size < NUM_TEXTURES){
-        wallTextures[size] = loadTexture(instance, paths[0]);
-        setTexture(instance, paths, ++size);
+int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size) {
+    if (size >= NUM_TEXTURES) {
+        return size;
     }
-    return size;
+    wallTextures[size] = loadTexture(instance, paths[size]);
+    if (wallTextures[size] == NULL) {
+        printf("Failed to load texture at index %d: %s\n", size, paths[size]);
+        return size; 
+    }
+    return setTexture(instance, paths, size + 1);
 }
+
+
+
+
 
 
 
@@ -60,15 +71,11 @@ int main(int argc, char **argv) {
     RayDirection ray = {.x = 0, .y = 0};
     double perpWallDist, time = 0, oldTime = 0, cameraX, frameTime, moveSpeed;
     int hitSide, mapX, mapY, game_running = 1;
-    char paths[1][1024] = {"../images/wall1.bmp"};
-    
-
-    if (!init_instance(&instance)) {
+    if (!init_instance(&instance))
         return 1;
-    }
-
-    setTexture(&instance ,paths, 0);
-
+    initTexturePaths();
+    setTexture(&instance ,TexturePaths, 0);
+   
     while (game_running) {
         oldTime = time;
         time = SDL_GetTicks();
@@ -89,6 +96,7 @@ int main(int argc, char **argv) {
         renderCeilAndGround(&instance,  wallTextures[0],  &p,  direction, plan);
 
         for (int x = 0; x < SCREEN_WIDTH; x++) {
+            hitSide = 0;
             cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
             ray.x = direction.x + plan.x * cameraX;
             ray.y = direction.y + plan.y * cameraX;
@@ -96,7 +104,6 @@ int main(int argc, char **argv) {
             mes.deltaY = (ray.y == 0) ? 1e30 : fabs(1 / ray.y);
             mapX = (int)p.x;
             mapY = (int)p.y;
-            hitSide = 0;
 
             performDDA(&ray, &mes, &p, &mapX, &mapY, &hitSide);
 
@@ -114,11 +121,7 @@ int main(int argc, char **argv) {
             if (drawStart < 0) drawStart = 0;
             if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
 
-            int wallType = map[mapY][mapX] - 1;
-            if (wallType < 0 || wallType >= NUM_TEXTURES) {
-                wallType = 0;
-            }
-
+        
             double wallX = (hitSide == 0) ? p.y + perpWallDist * ray.y : p.x + perpWallDist * ray.x;
             wallX -= floor(wallX);
             int textureX = (int)(wallX * 64);
@@ -128,17 +131,15 @@ int main(int argc, char **argv) {
 
             SDL_Rect srcRect = {textureX, 0, 1, 64}; 
             SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
-            SDL_RenderCopy(instance.renderer, wallTextures[wallType], &srcRect, &destRect);
-
+            SDL_RenderCopy(instance.renderer, wallTextures[1], &srcRect, &destRect);
         }
-
         SDL_RenderPresent(instance.renderer);
-
     }
 
     for (int i = 0; i < NUM_TEXTURES; i++) {
         SDL_DestroyTexture(wallTextures[i]);
     }
+    freeTexturePaths();
     destroy_instance(&instance);
     return 0;
 }

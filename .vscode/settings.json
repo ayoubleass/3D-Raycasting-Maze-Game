@@ -1,6 +1,9 @@
 {
     "files.associations": {
         "texture.C": "cpp",
-        "main.h": "c"
+        "main.h": "c",
+        "math.h": "c",
+        "dirent.h": "c",
+        "stdio.h": "c"
     }
 }

@@ -25,3 +25,8 @@
     Ensure that the SDL2 library is correctly installed and that the mingw_dev_lib directory contains the necessary files.
     If the build process fails, double-check that make is properly installed and configured on your
 
+
+
+to Texture.c
+    gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c src/essential.c src/init_sdl.c  src/move.c -lmingw32 -lSDL2main -lSDL2
+

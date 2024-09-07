@@ -15,8 +15,14 @@
 #define texWidth 64
 #define texHeight 64
 
+
+#define NUM_TEXTURES 2
+
+
 extern int map[mapWidth][mapHeight];
+extern char *TexturePaths[NUM_TEXTURES];
 extern int color;
+
 
 typedef struct {
     SDL_Window* window;
@@ -77,4 +83,8 @@ void rotate(int key, Direction *direction, Plan *plane) ;
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) ;
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed);
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
+void initTexturePaths();
+void freeTexturePaths();
+
+
 #endif
