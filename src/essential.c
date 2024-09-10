@@ -91,22 +91,22 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
     SDL_SetRenderDrawColor(instance->renderer, 135, 206, 235, 255); 
     SDL_RenderClear(instance->renderer);
     SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
+    RayDirection ray0 = {.x = direction.x - plan.x , .y= direction.y - plan.y};
+    RayDirection ray1 = {.x = direction.x + plan.x , .y= direction.y + plan.y};
     int y = SCREEN_HEIGHT / 2;
     if (groundTexture) {
         for (; y < SCREEN_HEIGHT; y++) {
-            double rayDirX0 = direction.x - plan.x;
-            double rayDirX1 = direction.x + plan.x;
-            double rayDirY0 = direction.y - plan.y;
-            double rayDirY1 = direction.y + plan.y;
             int pY = y - SCREEN_HEIGHT / 2;  
-            double posZ = 0.5 * SCREEN_HEIGHT;      
-            double rowDistance = posZ / pY;
-            double floorStepX = rowDistance * (rayDirX1 - rayDirX0) / SCREEN_WIDTH;
-            double floorStepY = rowDistance * (rayDirY1 - rayDirY0) / SCREEN_WIDTH;
-            /*printf("rowDistance  : %lf\n", rowDistance);*/
-            double floorX = p->x + rowDistance * rayDirX0;
-            double floorY = p->y + rowDistance * rayDirY0;
+            double rowDistance = (0.5 * SCREEN_HEIGHT) / pY;
+            /*linear interpolation*/
+            double floorStepX = rowDistance * (ray1.x - ray0.x) / SCREEN_WIDTH;
+            double floorStepY = rowDistance * (ray1.y - ray0.y) / SCREEN_WIDTH;
             
+            double floorX = p->x + rowDistance * ray0.x;
+            double floorY = p->y + rowDistance * ray0.y;
+            
+            printf("floor x %lf\n", floorX);
+            printf("floor y %lf\n", floorY);
             for (int x = 0; x < SCREEN_WIDTH; x++) {
                 int cellX = (int)floorX;
                 int cellY = (int)floorY;              
@@ -118,6 +118,9 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
                 SDL_Rect destRect = {x, y, 1, 1};
                 SDL_RenderCopy(instance->renderer, groundTexture, &srcRect, &destRect);
             }
+            /*SDL_RenderPresent(instance->renderer);
+            sleep(1);*/
+
         }
     }
 }

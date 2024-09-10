@@ -13,7 +13,10 @@
 
 
 
-void rotate(int key, Direction *direction, Plan *plane) {
+
+/*void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed)*/
+
+void rotateAndMove(int key, Player *p , Direction *direction, Plan *plane, double move_speed) {
     double rotation_speed = 0.05;
     double cos_rot = cos(rotation_speed);
     double sin_rot = sin(rotation_speed);
@@ -42,6 +45,12 @@ void rotate(int key, Direction *direction, Plan *plane) {
                 plane->x = plane->x * cos_rot + plane->y * sin_rot;
                 plane->y = -oldPlaneX * sin_rot + plane->y * cos_rot;
             }
+            break;
+        case SDLK_UP:
+            move(key, p, direction, move_speed); 
+            break;
+        case SDLK_DOWN:
+            move(key, p, direction, move_speed); 
             break;
     }
 }

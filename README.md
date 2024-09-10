@@ -13,9 +13,6 @@
     Open a terminal or command prompt in the project directory.
 
     Run the following command:
-
-    bash
-    Copier le code
     make
     This will compile the game and create the executable file.
 
@@ -27,6 +24,6 @@
 
 
 
-to Texture.c
-    gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c src/essential.c src/init_sdl.c  src/move.c -lmingw32 -lSDL2main -lSDL2
+    To run the texture.c file  use this cmd :
+        gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c  src/rotate.c src/essential.c src/init_sdl.c  src/init-texture_path.c src/move.c -lmingw32 -lSDL2main -lSDL2
 

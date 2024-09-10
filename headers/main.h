@@ -77,14 +77,13 @@ typedef struct
 
 int init_instance(SDL_Instance * instance);
 void destroy_instance(SDL_Instance *instance);
-void drawMap(SDL_Instance *instance);
 void performDDA(RayDirection *ray, Measures *mes, Player *p, int *mapX, int *mapY, int *hitSide);
-void rotate(int key, Direction *direction, Plan *plane) ;
+// void rotate(int key, Player *p , Direction *direction, Plan *plane, double move_speed);
+void rotateAndMove(int key, Player *p , Direction *direction, Plan *plane, double move_speed);
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) ;
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed);
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
 void initTexturePaths();
-void freeTexturePaths();
-
+void freeTexturePaths() ;
 
 #endif

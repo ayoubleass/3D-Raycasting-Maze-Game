@@ -11,6 +11,8 @@
 /*gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c  src/rotate.c src/essential.c src/init_sdl.c  src/init-texture_path.c src/move.c -lmingw32 -lSDL2main -lSDL2*/
 
 char *TexturePaths[NUM_TEXTURES];
+SDL_Texture *wallTextures[NUM_TEXTURES];
+
 
 int map[mapWidth][mapHeight]  ={
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -41,7 +43,7 @@ int map[mapWidth][mapHeight]  ={
 
 
 
-SDL_Texture *wallTextures[NUM_TEXTURES];
+
 
 int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size) {
     if (size >= NUM_TEXTURES) {
@@ -87,8 +89,8 @@ int main(int argc, char **argv) {
                 game_running = 0;
             }
             if (e.type == SDL_KEYDOWN) {
-                rotate(e.key.keysym.sym, &direction, &plan);
-                move(e.key.keysym.sym, &p, &direction, moveSpeed);
+                rotateAndMove(e.key.keysym.sym, &p , &direction, &plan, moveSpeed);
+                /*move(e.key.keysym.sym, &p, &direction, moveSpeed);*/
             }
         }
 
@@ -112,26 +114,25 @@ int main(int argc, char **argv) {
             } else {
                 perpWallDist = (mes.sideY - mes.deltaY);
             }
+            // int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
+            // int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
+            // int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
 
-            int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
-            int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
-            int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
 
-
-            if (drawStart < 0) drawStart = 0;
-            if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
+            // if (drawStart < 0) drawStart = 0;
+            // if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
 
         
-            double wallX = (hitSide == 0) ? p.y + perpWallDist * ray.y : p.x + perpWallDist * ray.x;
-            wallX -= floor(wallX);
-            int textureX = (int)(wallX * 64);
-            if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0)) {
-                textureX = 64 - textureX - 1;
-            }
+            // double wallX = (hitSide == 0) ? p.y + perpWallDist * ray.y : p.x + perpWallDist * ray.x;
+            // wallX -= floor(wallX);
+            // int textureX = (int)(wallX * 64);
+            // if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0)) {
+            //     textureX = 64 - textureX - 1;
+            // }
 
-            SDL_Rect srcRect = {textureX, 0, 1, 64}; 
-            SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
-            SDL_RenderCopy(instance.renderer, wallTextures[1], &srcRect, &destRect);
+            // SDL_Rect srcRect = {textureX, 0, 1, 64}; 
+            // SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
+            // SDL_RenderCopy(instance.renderer, wallTextures[0], &srcRect, &destRect);
         }
         SDL_RenderPresent(instance.renderer);
     }
@@ -139,7 +140,7 @@ int main(int argc, char **argv) {
     for (int i = 0; i < NUM_TEXTURES; i++) {
         SDL_DestroyTexture(wallTextures[i]);
     }
-    freeTexturePaths();
+    freeTexturePaths() ;
     destroy_instance(&instance);
     return 0;
 }
