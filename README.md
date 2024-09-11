@@ -1,29 +1,22 @@
-3D Raycasting Game
-    Overview
-    This project is a 3D game developed using raycasting. It offers an immersive experience, simulating a 3D environment with a focus on performance and simplicity.
+# 3D Raycasting Maze Game
 
-    Requirements
-    To run the game, ensure that you have the following dependencies installed on your machine:
+## Overview
+This project is a 3D game developed using raycasting, a technique that simulates 3D environments by casting rays from the player’s viewpoint. The game focuses on providing an immersive experience with simple mechanics, optimized performance, and a straightforward approach to rendering 3D environments in real-time.
 
-    SDL2 Library: The Simple DirectMedia Layer (SDL) version 2.x is required for this project. Install SDL2 on your system by following the instructions appropriate for your operating system.
-    Directory Setup: You need to create a directory named mingw_dev_lib in the root of your C: drive (C:/mingw_dev_lib). Place the SDL2 library files inside this directory to allow the game to compile and run without issues.
-    Build and Run
-    To compile the code and run the executable, follow these steps:
+![Gameplay Screenshot](screenshot1.png)
+Screenshot of the main gameplay interface.
 
-    Open a terminal or command prompt in the project directory.
-
-    Run the following command:
-    make
-    This will compile the game and create the executable file.
-
-    After the build process completes, the game should automatically run. If not, locate the executable file and run it manually.
-
-    Troubleshooting
-    Ensure that the SDL2 library is correctly installed and that the mingw_dev_lib directory contains the necessary files.
-    If the build process fails, double-check that make is properly installed and configured on your
+## Running the Game
+### On Windows
+Run the following command in your terminal to compile the game and create the executable file:
+./run.bat
 
 
+### On Linux :
+Run the following command on your terminal :
+make
 
-    To run the texture.c file  use this cmd :
-        gcc  -I C:\\mingw_dev_lib\include\SDL2  -L C:\\mingw_dev_lib\lib  -o texture src/1-texture.c  src/rotate.c src/essential.c src/init_sdl.c  src/init-texture_path.c src/move.c -lmingw32 -lSDL2main -lSDL2
+Once the game is compiled, you can run the executable (`maze.exe` or `./maze`) to start the game.
+    
+    
 

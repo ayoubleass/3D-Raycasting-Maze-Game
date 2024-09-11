@@ -1,13 +1,11 @@
-
-
 CC = gcc
-FLAGS =
+FLAGS = -Wall -Werror -Wextra -pedantic
 RM = rm
-SRC = src/main.c src/drawMap.c src/init_sdl.c 
-NAME = run
-LIBDIR = -L C:\\mingw_dev_lib\lib 
+SRC = src/1-texture.c  src/rotate.c src/essential.c src/init_sdl.c  src/init-texture_path.c src/move.c
+NAME = maze
+LIBDIR = -L .\lib
 LIBS = -lmingw32 -lSDL2main -lSDL2
-HEADERS =  -I C:\\mingw_dev_lib\include\SDL2 
+HEADERS =  -I ./include\SDL2 
 
 all: $(NAME)
 

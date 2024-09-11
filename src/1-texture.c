@@ -73,6 +73,8 @@ int main(int argc, char **argv) {
     RayDirection ray = {.x = 0, .y = 0};
     double perpWallDist, time = 0, oldTime = 0, cameraX, frameTime, moveSpeed;
     int hitSide, mapX, mapY, game_running = 1;
+    (void) argc, (void) argv;
+    
     if (!init_instance(&instance))
         return 1;
     initTexturePaths();
@@ -114,25 +116,25 @@ int main(int argc, char **argv) {
             } else {
                 perpWallDist = (mes.sideY - mes.deltaY);
             }
-            // int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
-            // int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
-            // int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
+            int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
+            int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
+            int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
 
 
-            // if (drawStart < 0) drawStart = 0;
-            // if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
+            if (drawStart < 0) drawStart = 0;
+            if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
 
         
-            // double wallX = (hitSide == 0) ? p.y + perpWallDist * ray.y : p.x + perpWallDist * ray.x;
-            // wallX -= floor(wallX);
-            // int textureX = (int)(wallX * 64);
-            // if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0)) {
-            //     textureX = 64 - textureX - 1;
-            // }
+            double wallX = (hitSide == 0) ? p.y + perpWallDist * ray.y : p.x + perpWallDist * ray.x;
+            wallX -= floor(wallX);
+            int textureX = (int)(wallX * 64);
+            if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0)) {
+                textureX = 64 - textureX - 1;
+            }
 
-            // SDL_Rect srcRect = {textureX, 0, 1, 64}; 
-            // SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
-            // SDL_RenderCopy(instance.renderer, wallTextures[0], &srcRect, &destRect);
+            SDL_Rect srcRect = {textureX, 0, 1, 64}; 
+            SDL_Rect destRect = {x, drawStart, 1, drawEnd - drawStart};
+            SDL_RenderCopy(instance.renderer, wallTextures[0], &srcRect, &destRect);
         }
         SDL_RenderPresent(instance.renderer);
     }

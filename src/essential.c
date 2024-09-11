@@ -37,9 +37,6 @@
 
 void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int *mapY, int *hitSide) {
     int stepX, stepY;
-    double initSideX = mes->sideX;
-    double initSideY = mes->sideY;
-
     if (ray->x < 0) {
         stepX = -1;
         mes->sideX = (player->x - *mapX) * mes->deltaX;
@@ -90,7 +87,6 @@ SDL_Texture *loadTexture(SDL_Instance *instance, const char *path) {
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) {
     SDL_SetRenderDrawColor(instance->renderer, 135, 206, 235, 255); 
     SDL_RenderClear(instance->renderer);
-    SDL_Rect groundRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
     RayDirection ray0 = {.x = direction.x - plan.x , .y= direction.y - plan.y};
     RayDirection ray1 = {.x = direction.x + plan.x , .y= direction.y + plan.y};
     int y = SCREEN_HEIGHT / 2;
@@ -105,8 +101,8 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
             double floorX = p->x + rowDistance * ray0.x;
             double floorY = p->y + rowDistance * ray0.y;
             
-            printf("floor x %lf\n", floorX);
-            printf("floor y %lf\n", floorY);
+            /*printf("floor x %lf\n", floorX);
+            printf("floor y %lf\n", floorY);*/
             for (int x = 0; x < SCREEN_WIDTH; x++) {
                 int cellX = (int)floorX;
                 int cellY = (int)floorY;              
