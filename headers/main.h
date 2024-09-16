@@ -2,6 +2,7 @@
 #define MAZE_H
 
 #include <SDL.h>
+#include <SDL_image.h>
 
 
 
@@ -16,12 +17,12 @@
 #define texHeight 64
 
 
-#define NUM_TEXTURES 2
+#define NUM_TEXTURES 10
 
 
 extern int map[mapWidth][mapHeight];
 extern char *TexturePaths[NUM_TEXTURES];
-extern int color;
+extern SDL_Texture *wallTextures[NUM_TEXTURES];
 
 
 typedef struct {
@@ -78,12 +79,14 @@ typedef struct
 int init_instance(SDL_Instance * instance);
 void destroy_instance(SDL_Instance *instance);
 void performDDA(RayDirection *ray, Measures *mes, Player *p, int *mapX, int *mapY, int *hitSide);
-// void rotate(int key, Player *p , Direction *direction, Plan *plane, double move_speed);
 void rotateAndMove(int key, Player *p , Direction *direction, Plan *plane, double move_speed);
-void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) ;
+void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan);
+void ceilTexture(SDL_Instance *instance, SDL_Texture *ceilingTexture, Player *p, Direction direction, Plan plan);
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed);
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
 void initTexturePaths();
-void freeTexturePaths() ;
-
+void freeTexturePaths();
+void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *plan );
+int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size);
+void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture,  Direction *dir ,int gunTextureWidth, int gunTextureHeight) ;
 #endif
