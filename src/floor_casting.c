@@ -6,6 +6,18 @@
 #include<unistd.h>
 #include <string.h>
 
+/**
+ * setTexture - Recursively loads textures into wallTextures array
+ * @instance: Pointer to the SDL instance that contains the renderer
+ * @paths: Array of file paths for the textures
+ * @size: Current index of the texture being loaded
+ * 
+ * This function loads textures from the provided paths array into the 
+ * wallTextures array recursively. If a texture fails to load, it prints
+ * an error message and returns the current size of the texture array.
+ * 
+ * Return: The current size of the texture array.
+ */
 
 int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size) {
     if (size >= NUM_TEXTURES) {
@@ -20,6 +32,17 @@ int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size) {
 }
 
 
+/**
+ * loadTexture - Loads a texture from a file path
+ * @instance: Pointer to the SDL instance that contains the renderer
+ * @path: The file path to the texture
+ * 
+ * This function loads an image from the specified path and converts it 
+ * to an SDL texture that can be rendered. If it fails to load the image 
+ * or create the texture, it prints an error message.
+ * 
+ * Return: The loaded SDL texture, or NULL if loading failed.
+ */
 
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path) {
     SDL_Surface *tempSurface = IMG_Load(path); 
@@ -34,6 +57,19 @@ SDL_Texture *loadTexture(SDL_Instance *instance, const char *path) {
     }
     return texture;
 }
+
+/**
+ * renderCeilAndGround - Renders the ceiling and ground textures
+ * @instance: Pointer to the SDL instance that contains the renderer
+ * @groundTexture: SDL texture to be used for the ground
+ * @p: Pointer to the player position
+ * @direction: Direction of the player
+ * @plan: Projection plane for raycasting
+ * 
+ * This function renders the ground textures by calculating the floor
+ * projection based on the player's position and direction. It also 
+ * renders the ceiling by calling the `ceilTexture()` function.
+ */
 
 
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) {
@@ -70,7 +106,18 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
 
 
 
-
+/**
+ * renderGun - Renders a gun texture at the bottom of the screen
+ * @instance: Pointer to the SDL instance that contains the renderer
+ * @gunTexture: SDL texture of the gun
+ * @dir: Pointer to the player's direction (used for rotating the gun)
+ * @gunTextureWidth: Width of the gun texture
+ * @gunTextureHeight: Height of the gun texture
+ * 
+ * This function renders the gun texture in the middle bottom of the screen. 
+ * It adds a slight movement to the gun based on the time and rotates it based 
+ * on the player's direction.
+ */
 void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture,  Direction *dir ,int gunTextureWidth, int gunTextureHeight) {
     int gunX = SCREEN_WIDTH / 2 - gunTextureWidth / 2;
     int gunY = SCREEN_HEIGHT - gunTextureHeight;

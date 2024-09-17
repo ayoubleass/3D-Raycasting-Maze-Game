@@ -4,6 +4,13 @@
 
 
 
+/**
+ * initTexturePaths - Initializes the paths for texture files
+ * This function reads the texture files from the "images" directory and
+ * stores the full paths in the TexturePaths array. It allocates memory
+ * for each path dynamically and handles errors if memory allocation fails.
+ */
+
 void initTexturePaths() {
     DIR *d;
     struct dirent *dir;
@@ -36,6 +43,12 @@ void initTexturePaths() {
 }
 
 
+/**
+ * freeTexturePaths - Frees the memory allocated for texture paths
+ * This function loops through the TexturePaths array and frees the 
+ * dynamically allocated memory for each texture path. It also sets
+ * the pointer to NULL to prevent dangling pointers.
+ */
 
 void freeTexturePaths() {
     for (int i = 0; i < NUM_TEXTURES; i++) {

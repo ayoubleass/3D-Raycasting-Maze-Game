@@ -2,9 +2,9 @@
 
 REM Compile the program
 gcc -I ./include\SDL2 -L ./lib ^
-    -o maze src/1-texture.c src/rotate.c src/essential.c src/init_sdl.c ^
-    src/init-texture_path.c src/move.c ^
-    -lmingw32 -lSDL2main -lSDL2
+    -o maze src/maze.c src/rotate.c src/floor_casting.c src/init_sdl.c ^
+    src/init-texture_path.c src/move.c src/dda.c src/wall_casting.c src/ceilTexture.c ^
+    -lmingw32 -lSDL2main -lSDL2  -lSDL2_image
 
 REM Check if the compilation was successful
 if %errorlevel% neq 0 (
@@ -14,6 +14,6 @@ if %errorlevel% neq 0 (
 )
 
 REM Run the compiled program
-texture.exe
+maze.exe
 
 pause

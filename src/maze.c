@@ -41,7 +41,17 @@ int map[mapWidth][mapHeight]  ={
 };
 
 
-
+/**
+ * main - Entry point of the application
+ * @argc: Number of arguments passed
+ * @argv: Array of arguments passed
+ *
+ * This function initializes SDL, sets up textures, and enters the main
+ * game loop where it handles rendering and player movement until the game
+ * exits. It also manages texture cleanup and SDL instance destruction.
+ * 
+ * Return: 0 on success, 1 on failure
+ */
 
 
 
@@ -67,7 +77,7 @@ int main(int argc, char **argv) {
         SDL_RenderClear(instance.renderer);
         renderCeilAndGround(&instance,  wallTextures[9],  &p,  direction, plan);
         drawWalls(&instance,&p, &direction, &plan);
-        renderGun(&instance,wallTextures[9] , &direction ,100, 100);
+        /*renderGun(&instance,wallTextures[9] , &direction ,100, 100);*/
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT) {
                 game_running = 0;

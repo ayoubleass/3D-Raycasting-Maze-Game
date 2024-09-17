@@ -24,6 +24,12 @@ extern int map[mapWidth][mapHeight];
 extern char *TexturePaths[NUM_TEXTURES];
 extern SDL_Texture *wallTextures[NUM_TEXTURES];
 
+/**
+ * struct SDL_Instance - Contains all SDL-related elements for rendering
+ * @window: Pointer to the SDL window
+ * @screenSurface: Pointer to the SDL surface
+ * @renderer: Pointer to the SDL renderer
+ */
 
 typedef struct {
     SDL_Window* window;
@@ -32,11 +38,22 @@ typedef struct {
 }SDL_Instance;
 
 
+/**
+ * struct Player - Defines the player’s position on the map
+ * @x: X-coordinate of the player
+ * @y: Y-coordinate of the player
+ */
 typedef struct {
     double x;
     double y;
 } Player;
 
+
+/**
+ * struct Direction - Represents a 2D direction vector
+ * @x: X-component of the direction
+ * @y: Y-component of the direction
+ */
 
 typedef struct{
     double x;
@@ -44,7 +61,13 @@ typedef struct{
 }Direction;
 
 
-
+/**
+ * struct MovementVectors - Represents the movement and camera plane vectors
+ * @directionX: X-component of the player's direction
+ * @directionY: Y-component of the player's direction
+ * @planX: X-component of the camera plane
+ * @planY: Y-component of the camera plane
+ */
 typedef struct {
     double directionX;
     double directionY;
@@ -53,18 +76,35 @@ typedef struct {
 } MovementVectors;
 
 
+/**
+ * struct RayDirection - Defines the direction of the ray being cast
+ * @x: X-component of the ray's direction
+ * @y: Y-component of the ray's direction
+ */
 typedef struct{
     double x;
     double y; 
 } RayDirection;
 
 
+/**
+ * struct Plan - Represents the camera plane (2D plane perpendicular to the direction)
+ * @x: X-component of the camera plane
+ * @y: Y-component of the camera plane
+ */
 typedef struct {
     double x;
     double y;
 }Plan;
 
 
+/**
+ * struct Measures - Holds values related to raycasting calculations
+ * @deltaX: Difference in X for raycasting
+ * @deltaY: Difference in Y for raycasting
+ * @sideX: X-coordinate where a ray crosses a grid line
+ * @sideY: Y-coordinate where a ray crosses a grid line
+ */
 
 typedef struct 
 {
