@@ -23,8 +23,8 @@ int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size) {
     if (size >= NUM_TEXTURES) {
         return size;
     }
-    wallTextures[size] = loadTexture(instance, paths[size]);
-    if (wallTextures[size] == NULL) {
+    textures[size] = loadTexture(instance, paths[size]);
+    if (textures[size] == NULL) {
         printf("Failed to load texture at index %d: %s\n", size, paths[size]);
         return size; 
     }
@@ -75,7 +75,7 @@ SDL_Texture *loadTexture(SDL_Instance *instance, const char *path) {
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan) {
     RayDirection ray0 = {.x = direction.x - plan.x , .y= direction.y - plan.y};
     RayDirection ray1 = {.x = direction.x + plan.x , .y= direction.y + plan.y};
-    ceilTexture(instance,groundTexture, p, direction, plan);
+    ceilTexture(instance,textures[9], p, direction, plan);
     int y = SCREEN_HEIGHT / 2;
     if (groundTexture) {
         for (; y < SCREEN_HEIGHT; y++) {
@@ -95,7 +95,7 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
                     floorY += floorStepY;
                     SDL_Rect srcRect = {tx, ty, 1, 1};
                     SDL_Rect destRect = {x, y, 1, 1};
-                    SDL_RenderCopy(instance->renderer, wallTextures[3], &srcRect, &destRect);
+                    SDL_RenderCopy(instance->renderer,textures[1], &srcRect, &destRect);
                 }
             }
             
@@ -118,13 +118,21 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
  * It adds a slight movement to the gun based on the time and rotates it based 
  * on the player's direction.
  */
-void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture,  Direction *dir ,int gunTextureWidth, int gunTextureHeight) {
+void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWidth, int gunTextureHeight) {
+    if (gunTexture == NULL) {
+        printf("Gun texture is NULL.\n");
+        return;
+    }
+
+    // Calculate the position at the bottom center of the screen
     int gunX = SCREEN_WIDTH / 2 - gunTextureWidth / 2;
     int gunY = SCREEN_HEIGHT - gunTextureHeight;
-    gunX += sin(SDL_GetTicks() / 1000.0) * 5; 
-    double angle = atan2(dir->y, dir->x) * 180.0 / M_PI;
 
+    // Define source and destination rectangles
     SDL_Rect srcRect = {0, 0, gunTextureWidth, gunTextureHeight};
     SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight};
-    SDL_RenderCopyEx(instance->renderer, gunTexture, &srcRect, &destRect, angle, NULL, SDL_FLIP_NONE);
+
+    // Render the gun texture without rotation
+    SDL_RenderCopyEx(instance->renderer, gunTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
+    
 }

@@ -52,6 +52,6 @@ void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *pl
             SDL_Rect srcRect = {textureX, 0, 1, 64}; 
             SDL_Rect destRect = {x, drawStart, 2, drawEnd - drawStart};
             SDL_SetRenderDrawColor(instance->renderer, 255 * intensity, 255 * intensity, 255 * intensity, 255);
-            SDL_RenderCopy(instance->renderer, wallTextures[3], &srcRect, &destRect);
+            SDL_RenderCopy(instance->renderer, textures[5], &srcRect, &destRect);
         }
 }

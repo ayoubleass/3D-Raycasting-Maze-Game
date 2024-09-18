@@ -19,10 +19,10 @@
 
 #define NUM_TEXTURES 10
 
-
+#define numSprites 19
 extern int map[mapWidth][mapHeight];
 extern char *TexturePaths[NUM_TEXTURES];
-extern SDL_Texture *wallTextures[NUM_TEXTURES];
+extern SDL_Texture *textures[NUM_TEXTURES];
 
 /**
  * struct SDL_Instance - Contains all SDL-related elements for rendering
@@ -61,19 +61,6 @@ typedef struct{
 }Direction;
 
 
-/**
- * struct MovementVectors - Represents the movement and camera plane vectors
- * @directionX: X-component of the player's direction
- * @directionY: Y-component of the player's direction
- * @planX: X-component of the camera plane
- * @planY: Y-component of the camera plane
- */
-typedef struct {
-    double directionX;
-    double directionY;
-    double planX;
-    double planY;
-} MovementVectors;
 
 
 /**
@@ -116,6 +103,7 @@ typedef struct
 
 
 
+
 int init_instance(SDL_Instance * instance);
 void destroy_instance(SDL_Instance *instance);
 void performDDA(RayDirection *ray, Measures *mes, Player *p, int *mapX, int *mapY, int *hitSide);
@@ -128,5 +116,6 @@ void initTexturePaths();
 void freeTexturePaths();
 void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *plan );
 int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size);
-void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture,  Direction *dir ,int gunTextureWidth, int gunTextureHeight) ;
+void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWidth, int gunTextureHeight) ;
+SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
 #endif
