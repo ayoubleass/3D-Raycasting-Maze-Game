@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
         SDL_RenderClear(instance.renderer);
         renderCeilAndGround(&instance,  textures[1],  &p,  direction, plan);
         drawWalls(&instance,&p, &direction, &plan);
-        renderGun(&instance, textures[6],gunTextureWidth, gunTextureHeight);
+        renderGun(&instance, textures[6],gunTextureWidth, gunTextureHeight - 100);
 
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT)

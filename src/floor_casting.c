@@ -129,8 +129,8 @@ void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWi
     int gunY = SCREEN_HEIGHT - gunTextureHeight;
 
     // Define source and destination rectangles
-    SDL_Rect srcRect = {0, 0, gunTextureWidth, gunTextureHeight};
-    SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight};
+    SDL_Rect srcRect = {0, 0, gunTextureWidth, gunTextureHeight };
+    SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight };
 
     // Render the gun texture without rotation
     SDL_RenderCopyEx(instance->renderer, gunTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
