@@ -118,21 +118,18 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
  * It adds a slight movement to the gun based on the time and rotates it based 
  * on the player's direction.
  */
-void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWidth, int gunTextureHeight) {
-    if (gunTexture == NULL) {
+void renderGun(SDL_Instance *instance, SDL_Texture *texture, int gunTextureWidth, int gunTextureHeight) {
+    if (texture == NULL) {
         printf("Gun texture is NULL.\n");
         return;
     }
 
-    // Calculate the position at the bottom center of the screen
     int gunX = SCREEN_WIDTH / 2 - gunTextureWidth / 2;
     int gunY = SCREEN_HEIGHT - gunTextureHeight;
 
-    // Define source and destination rectangles
     SDL_Rect srcRect = {0, 0, gunTextureWidth, gunTextureHeight };
     SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight };
 
-    // Render the gun texture without rotation
-    SDL_RenderCopyEx(instance->renderer, gunTexture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
+    SDL_RenderCopyEx(instance->renderer, texture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
     
 }
