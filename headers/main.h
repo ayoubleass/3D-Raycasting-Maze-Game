@@ -106,8 +106,8 @@ typedef struct
 
 int init_instance(SDL_Instance * instance);
 void destroy_instance(SDL_Instance *instance);
-void performDDA(RayDirection *ray, Measures *mes, Player *p, int *mapX, int *mapY, int *hitSide);
-void rotateAndMove(int key, Player *p , Direction *direction, Plan *plane, double move_speed);
+void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int *mapY, int *hitSid, int *cellValue);
+void rotateAndMove(const Uint8 *keyState, Player *p, Direction *direction, Plan *plane, double move_speed) ;
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan);
 void ceilTexture(SDL_Instance *instance, SDL_Texture *ceilingTexture, Player *p, Direction direction, Plan plan);
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed);
@@ -118,4 +118,6 @@ void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *pl
 int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size);
 void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWidth, int gunTextureHeight) ;
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
+void getTextureSize(SDL_Texture *texture, int *width, int *height);
+SDL_Texture  *getTexture(int cellValue);
 #endif

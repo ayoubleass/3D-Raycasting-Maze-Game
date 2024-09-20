@@ -52,11 +52,7 @@ int map[mapWidth][mapHeight]  ={
  * Return: 0 on success, 1 on failure
  */
 
-void getTextureSize(SDL_Texture *texture, int *width, int *height) {
-    if (SDL_QueryTexture(texture, NULL, NULL, width, height) != 0) {
-        printf("Unable to query texture size: %s\n", SDL_GetError());
-    }
-}
+
 
 int main(int argc, char **argv) {
     SDL_Instance instance;
@@ -89,7 +85,7 @@ int main(int argc, char **argv) {
             if (e.type == SDL_QUIT)
                 game_running = 0;
             if (e.type == SDL_KEYDOWN)
-                rotateAndMove(e.key.keysym.sym, &p , &direction, &plan, moveSpeed);
+                rotateAndMove(SDL_GetKeyboardState(NULL), &p , &direction, &plan, moveSpeed);
         }
         SDL_RenderPresent(instance.renderer);
     }

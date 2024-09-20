@@ -57,4 +57,17 @@ void destroy_instance(SDL_Instance *instance)
 }
 
 
+/**
+ * getTextureSize - Retrieves the width and height of an SDL texture.
+ * @texture: The SDL texture to query.
+ * @width: Pointer to an integer where the width of the texture will be stored.
+ * @height: Pointer to an integer where the height of the texture will be stored.
+ */
+
+
+void getTextureSize(SDL_Texture *texture, int *width, int *height) {
+    if (SDL_QueryTexture(texture, NULL, NULL, width, height) != 0) {
+        printf("Unable to query texture size: %s\n", SDL_GetError());
+    }
+}
 

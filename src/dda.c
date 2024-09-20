@@ -16,7 +16,7 @@
  * The function updates the mapX, mapY, and hitSide variables accordingly.
  */
 
-void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int *mapY, int *hitSide) {
+void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int *mapY, int *hitSide, int *cellValue) {
     int stepX, stepY;
     if (ray->x < 0) {
         stepX = -1;
@@ -43,6 +43,9 @@ void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int
             *mapY += stepY;
             *hitSide = 1;
         }
-        if (map[*mapY][*mapX] > 0) break;
+        if (map[*mapY][*mapX] > 0) {
+            *cellValue = map[*mapY][*mapX];
+            break;
+        }
     }
 }
