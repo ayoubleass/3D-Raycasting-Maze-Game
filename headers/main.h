@@ -103,11 +103,6 @@ typedef struct
 } Measures;
 
 
-typedef struct {
-    double x, y; 
-    int textureId;  
-} Sprite;
-
 
 
 
@@ -129,7 +124,6 @@ int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size);
 void renderWeapon(SDL_Instance *instance, SDL_Texture *texture);
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
 void getTextureSize(SDL_Texture *texture, int *width, int *height);
-void drawSpriteStripe(SDL_Instance *instance, Player *p, Direction *direction, Plan *plan);
 SDL_Texture  *getTexture(int cellValue);
 void freeTextures();
 
