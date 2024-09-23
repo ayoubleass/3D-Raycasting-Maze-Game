@@ -1,8 +1,7 @@
-#-Wall -Werror -Wextra -pedantic
 CC = gcc
 FLAGS = -Wall -Werror -Wextra -pedantic
 RM = rm
-SRC = src/maze.c  src/rotate.c src/floor_casting.c src/init_sdl.c  src/init-texture_path.c src/move.c src/dda.c src/wall_casting.c src/ceilTexture.c
+SRC = src/maze.c  src/rotate.c src/floor.c src/init_sdl.c  src/init-texture_path.c src/move.c src/dda.c src/wall.c src/ceil.c 
 NAME = maze
 LIBDIR = -L .\lib
 LIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image

@@ -58,3 +58,14 @@ void freeTexturePaths() {
         }
     }
 }
+
+
+
+/**
+ * freeTextures - Frees the memory allocated for textures
+ */
+void freeTextures(){
+    for (int i = 0; i < NUM_TEXTURES; i++) {
+        SDL_DestroyTexture(textures[i]);
+    }
+}

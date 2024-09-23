@@ -23,7 +23,8 @@
 extern int map[mapWidth][mapHeight];
 extern char *TexturePaths[NUM_TEXTURES];
 extern SDL_Texture *textures[NUM_TEXTURES];
-
+extern double zBuffer[SCREEN_WIDTH];
+extern double rotation_speed;
 /**
  * struct SDL_Instance - Contains all SDL-related elements for rendering
  * @window: Pointer to the SDL window
@@ -102,12 +103,21 @@ typedef struct
 } Measures;
 
 
+typedef struct {
+    double x, y; 
+    int textureId;  
+} Sprite;
+
+
+
 
 
 int init_instance(SDL_Instance * instance);
 void destroy_instance(SDL_Instance *instance);
 void performDDA(RayDirection *ray, Measures *mes, Player *player, int *mapX, int *mapY, int *hitSid, int *cellValue);
 void rotateAndMove(const Uint8 *keyState, Player *p, Direction *direction, Plan *plane, double move_speed) ;
+void rotate_left(Direction *direction, Plan *plane);
+void rotateRight(Direction *direction, Plan *plane);
 void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Player *p, Direction direction, Plan plan);
 void ceilTexture(SDL_Instance *instance, SDL_Texture *ceilingTexture, Player *p, Direction direction, Plan plan);
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed);
@@ -116,8 +126,11 @@ void initTexturePaths();
 void freeTexturePaths();
 void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *plan );
 int setTexture(SDL_Instance *instance, char* paths[NUM_TEXTURES], int size);
-void renderGun(SDL_Instance *instance, SDL_Texture *gunTexture, int gunTextureWidth, int gunTextureHeight) ;
+void renderWeapon(SDL_Instance *instance, SDL_Texture *texture);
 SDL_Texture *loadTexture(SDL_Instance *instance, const char *path);
 void getTextureSize(SDL_Texture *texture, int *width, int *height);
+void drawSpriteStripe(SDL_Instance *instance, Player *p, Direction *direction, Plan *plan);
 SDL_Texture  *getTexture(int cellValue);
+void freeTextures();
+
 #endif

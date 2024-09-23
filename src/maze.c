@@ -4,12 +4,12 @@
 #include <math.h>
 #include<windows.h> 
 #include<unistd.h>
-#include <dirent.h> 
 
 
 char *TexturePaths[NUM_TEXTURES];
 SDL_Texture *textures[NUM_TEXTURES];
-
+double zBuffer[SCREEN_WIDTH];
+double rotation_speed = 0.1;
 
 int map[mapWidth][mapHeight]  ={
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -40,6 +40,9 @@ int map[mapWidth][mapHeight]  ={
 
 
 
+
+
+
 /**
  * main - Entry point of the application
  * @argc: Number of arguments passed
@@ -54,6 +57,8 @@ int map[mapWidth][mapHeight]  ={
 
 
 
+
+
 int main(int argc, char **argv) {
     SDL_Instance instance;
     SDL_Event e;
@@ -61,26 +66,21 @@ int main(int argc, char **argv) {
     Direction direction = {.x = -1, .y = 0};
     Plan plan = {.x = 0, .y = 0.66};
     double  time = 0, oldTime = 0, frameTime, moveSpeed;
-    int gunTextureWidth, gunTextureHeight;
     int game_running = 1;
     (void) argc, (void) argv;
-
     if (!init_instance(&instance))
         return 1;
     initTexturePaths();
     setTexture(&instance ,TexturePaths, 0);  
-    getTextureSize(textures[6], &gunTextureWidth, &gunTextureHeight);
-
     while (game_running) {
         oldTime = time;
         time = SDL_GetTicks();
         frameTime = (time - oldTime) / 1000.0;
-        moveSpeed = frameTime * 10.0;
+        moveSpeed = frameTime * 5.0;
         SDL_RenderClear(instance.renderer);
         renderCeilAndGround(&instance,  textures[1],  &p,  direction, plan);
         drawWalls(&instance,&p, &direction, &plan);
-        renderGun(&instance, textures[6],gunTextureWidth, gunTextureHeight - 200);
-
+        renderWeapon(&instance, textures[6]);
         while (SDL_PollEvent(&e)) {
             if (e.type == SDL_QUIT)
                 game_running = 0;
@@ -89,9 +89,7 @@ int main(int argc, char **argv) {
         }
         SDL_RenderPresent(instance.renderer);
     }
-    for (int i = 0; i < NUM_TEXTURES; i++) {
-        SDL_DestroyTexture(textures[i]);
-    }
+    freeTextures();
     freeTexturePaths() ;
     destroy_instance(&instance);
     return 0;

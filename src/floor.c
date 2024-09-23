@@ -85,24 +85,21 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
             double floorStepY = rowDistance *  (ray1.y - ray0.y) / SCREEN_WIDTH; 
             double floorX = p->x + rowDistance * ray0.x;
             double floorY = p->y + rowDistance * ray0.y;
-            if(y > 240){
-                for (int x = 0; x < SCREEN_WIDTH; x++) {
-                    int cellX = (int)floorX;
-                    int cellY = (int)floorY;
-                    int tx = (int)(64 * (floorX - cellX)) & (64 - 1);
-                    int ty = (int)(64 * (floorY - cellY)) & (64 - 1);
-                    floorX += floorStepX;
-                    floorY += floorStepY;
-                    SDL_Rect srcRect = {tx, ty, 1, 1};
-                    SDL_Rect destRect = {x, y, 1, 1};
-                    SDL_RenderCopy(instance->renderer,textures[1], &srcRect, &destRect);
-                }
+            for (int x = 0; x < SCREEN_WIDTH; x++) {
+                int cellX = (int)floorX;
+                int cellY = (int)floorY;
+                int tx = (int)(64 * (floorX - cellX)) & (64 - 1);
+                int ty = (int)(64 * (floorY - cellY)) & (64 - 1);
+                floorX += floorStepX;
+                floorY += floorStepY;
+                SDL_Rect srcRect = {tx, ty, 1, 1};
+                SDL_Rect destRect = {x, y, 1, 1};
+                SDL_RenderCopy(instance->renderer,textures[1], &srcRect, &destRect);
             }
-            
-
         }
     }
 }
+
 
 
 
@@ -113,22 +110,20 @@ void renderCeilAndGround(SDL_Instance *instance, SDL_Texture *groundTexture, Pla
  * @dir: Pointer to the player's direction (used for rotating the gun)
  * @gunTextureWidth: Width of the gun texture
  * @gunTextureHeight: Height of the gun texture
- * 
- * This function renders the gun texture in the middle bottom of the screen. 
- * It adds a slight movement to the gun based on the time and rotates it based 
- * on the player's direction.
  */
-void renderGun(SDL_Instance *instance, SDL_Texture *texture, int gunTextureWidth, int gunTextureHeight) {
+void renderWeapon(SDL_Instance *instance, SDL_Texture *texture) {
+    int gunTextureWidth, gunTextureHeight, gunX, gunY ;
     if (texture == NULL) {
         printf("Gun texture is NULL.\n");
         return;
     }
-
-    int gunX = SCREEN_WIDTH / 2 - gunTextureWidth / 2;
-    int gunY = SCREEN_HEIGHT - gunTextureHeight;
+    getTextureSize(texture, &gunTextureWidth, &gunTextureHeight);
+    gunTextureHeight = (gunTextureHeight - 200);
+    gunX = SCREEN_WIDTH /2 - gunTextureWidth /2;
+    gunY = SCREEN_HEIGHT - gunTextureHeight;
 
     SDL_Rect srcRect = {0, 0, gunTextureWidth, gunTextureHeight };
-    SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight };
+    SDL_Rect destRect = {gunX, gunY, gunTextureWidth, gunTextureHeight};
 
     SDL_RenderCopyEx(instance->renderer, texture, &srcRect, &destRect, 0, NULL, SDL_FLIP_NONE);
     

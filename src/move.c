@@ -14,9 +14,9 @@
  */
 
 void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed) {
+    int mapX, mapY; 
     float newX = player->x;
     float newY = player->y;
-
     if (key == SDLK_UP) {
         newX += direction->x * move_speed;
         newY += direction->y * move_speed;
@@ -25,13 +25,11 @@ void move(SDL_Keycode key, Player *player, Direction *direction, double move_spe
         newY -= direction->y * move_speed;
     }
 
-    int mapX = (int)newX;
-    int mapY = (int)newY;
-
+    mapX = (int)newX;
+    mapY = (int)newY;
     if (map[mapY][(int)player->x] == 0) { 
         player->y = newY; 
     }
-
     if (map[(int)player->y][mapX] == 0) {
         player->x = newX; 
     }

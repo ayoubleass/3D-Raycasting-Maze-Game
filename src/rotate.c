@@ -8,40 +8,59 @@
  * @plane: A pointer to the camera plane vector.
  *
  * This function rotates the direction and plane vectors when the left or
- * right arrow keys are pressed. The rotation speed is constant.
+ * right arrow keys are pressed. 
  */
 
 
-
-
-/*void move(SDL_Keycode key, Player *player, Direction *direction, double move_speed)*/
-
 void rotateAndMove(const Uint8 *keyState, Player *p, Direction *direction, Plan *plane, double move_speed) {
-    double rotation_speed = 0.05;
-    double cos_rot = cos(rotation_speed);
-    double sin_rot = sin(rotation_speed);
-    double oldDirX, oldPlaneX;
-
     if (keyState[SDL_SCANCODE_LEFT]) {
-        oldDirX = direction->x;
-        direction->x = direction->x * cos_rot - direction->y * sin_rot;
-        direction->y = oldDirX * sin_rot + direction->y * cos_rot;
-        oldPlaneX = plane->x;
-        plane->x = plane->x * cos_rot - plane->y * sin_rot;
-        plane->y = oldPlaneX * sin_rot + plane->y * cos_rot;
+        rotate_left(direction, plane);
     }
     if (keyState[SDL_SCANCODE_RIGHT]) {
-        oldDirX = direction->x;
-        direction->x = direction->x * cos_rot + direction->y * sin_rot;
-        direction->y = -oldDirX * sin_rot + direction->y * cos_rot;
-        oldPlaneX = plane->x;
-        plane->x = plane->x * cos_rot + plane->y * sin_rot;
-        plane->y = -oldPlaneX * sin_rot + plane->y * cos_rot;
+        rotateRight(direction,plane);
     }
     if (keyState[SDL_SCANCODE_UP]) {
         move(SDLK_UP, p, direction, move_speed);
     }
     if (keyState[SDL_SCANCODE_DOWN]) {
         move(SDLK_DOWN, p, direction, move_speed);  
-    }
+    }   
+}
+
+
+/**
+ * rotate_left - Rotates the direction and plane vectors to the left.
+ * @direction: Pointer to the direction structure, representing the player's direction.
+ * @plane: Pointer to the plane structure, representing the camera plane.
+ */
+
+void rotate_left(Direction *direction, Plan *plane){
+    double oldDirX, oldPlaneX;
+    double cos_rotation = cos(rotation_speed);
+    double sin_rotation = sin(rotation_speed);
+
+    oldDirX = direction->x;
+    direction->x = direction->x * cos_rotation - direction->y * sin_rotation;
+    direction->y = oldDirX * sin_rotation + direction->y * cos_rotation;
+    oldPlaneX = plane->x;
+    plane->x = plane->x * cos_rotation - plane->y * sin_rotation;
+    plane->y = oldPlaneX * sin_rotation + plane->y * cos_rotation;
+}
+
+/**
+ * rotate_right - Rotates the direction and plane vectors to the right.
+ * @direction: Pointer to the direction structure, representing the player's direction.
+ * @plane: Pointer to the plane structure, representing the camera plane.
+ */
+void rotateRight(Direction *direction, Plan *plane){
+    double oldDirX, oldPlaneX;
+    double cos_rotation = cos(rotation_speed);
+    double sin_rotation = sin(rotation_speed);
+
+    oldDirX = direction->x;
+    direction->x = direction->x * cos_rotation + direction->y * sin_rotation;
+    direction->y = -oldDirX * sin_rotation + direction->y * cos_rotation;
+    oldPlaneX = plane->x;
+    plane->x = plane->x * cos_rotation + plane->y * sin_rotation;
+    plane->y = -oldPlaneX * sin_rotation + plane->y * cos_rotation;
 }

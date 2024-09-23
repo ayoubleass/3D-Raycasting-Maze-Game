@@ -1,7 +1,7 @@
 #include "../headers/main.h"
 #include <stdio.h>
 #include <math.h>
-
+#include <unistd.h>
 
 /**
  * performDDA - Performs Digital Differential Analysis (DDA) to detect wall hits.
@@ -21,7 +21,7 @@ void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *pl
     int cellValue = 1;
     Measures mes = {.deltaX = 0, .deltaY = 0, .sideX = 0, .sideY = 0};
     RayDirection ray = {.x = 0, .y = 0};
-    int hitSide, mapX, mapY, lineHeight, drawStart, drawEnd ;
+    int hitSide, mapX, mapY, lineHeight, drawStart, drawEnd, textureX;
     double perpWallDist , wallX ,intensity;
     for (int x = 0; x < SCREEN_WIDTH; x++) {
         hitSide = 0;
@@ -38,6 +38,7 @@ void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *pl
         } else {
             perpWallDist = (mes.sideY - mes.deltaY);
         }
+        zBuffer[x] = perpWallDist; 
         lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
         drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
         drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
@@ -45,16 +46,14 @@ void drawWalls(SDL_Instance *instance, Player *p, Direction *direction, Plan *pl
         if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
         wallX = (hitSide == 0) ? p->y + perpWallDist * ray.y : p->x + perpWallDist * ray.x;
         wallX -= floor(wallX);
-        int textureX = (int)(wallX * 64);
-        if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0)) {
+        textureX = (int)(wallX * 64);
+        if ((hitSide == 0 && ray.x > 0) || (hitSide == 1 && ray.y < 0))
             textureX = 64 - textureX - 1;
-        }
         intensity = 1.0 / (perpWallDist * perpWallDist);
         SDL_Rect srcRect = {textureX, 0, 1, 64}; 
         SDL_Rect destRect = {x, drawStart, 2, drawEnd - drawStart};
         SDL_SetRenderDrawColor(instance->renderer, 255 * intensity, 255 * intensity, 255 * intensity, 255);
         SDL_RenderCopy(instance->renderer, getTexture(cellValue), &srcRect, &destRect);
-
     }
 }
 
@@ -75,6 +74,5 @@ SDL_Texture  *getTexture(int cellValue){
     if(cellValue == 2){
         return textures[2];
     }
-    return textures[7];
- 
+    return textures[2];
 }
